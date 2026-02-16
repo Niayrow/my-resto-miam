@@ -1,26 +1,154 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-brand-orange: #ff4d00;
+  --color-brand-cyan: #00f2ff;
+  --color-brand-bg: #030303;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* --- CONFIGURATION DE BASE --- */
+@layer base {
+  html {
+    /* MAGIE : Réserve l'espace de la barre de scroll pour éviter le décalage */
+    scrollbar-gutter: stable;
+    background: var(--color-brand-bg);
+    color: white;
+    scroll-behavior: smooth;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    overflow-x: hidden;
+    /* Empêche tout bug de largeur */
+  }
+
+  /* Scrollbar Cyber-Néon ultra-fine */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #030303;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ff4d00;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 77, 0, 0.5);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* --- ANIMATIONS & UTILITIES --- */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .text-neon-orange {
+    text-shadow: 0 0 5px #ff4d00, 0 0 10px #ff4d0055;
+  }
+
+  .text-neon-cyan {
+    text-shadow: 0 0 5px #00f2ff;
+  }
+
+  @keyframes neon-flicker {
+
+    0%,
+    19%,
+    21%,
+    23%,
+    25%,
+    54%,
+    56%,
+    100% {
+      opacity: 1;
+      filter: drop-shadow(0 0 10px var(--color-brand-orange));
+    }
+
+    20%,
+    24%,
+    55% {
+      opacity: 0.7;
+      filter: drop-shadow(0 0 2px var(--color-brand-orange));
+    }
+  }
+
+  .animate-flicker {
+    animation: neon-flicker 3s infinite;
+  }
+
+  @keyframes glitch-anim {
+    0% {
+      transform: translate(0);
+    }
+
+    20% {
+      transform: translate(-2px, 2px);
+    }
+
+    40% {
+      transform: translate(-2px, -2px);
+    }
+
+    60% {
+      transform: translate(2px, 2px);
+    }
+
+    80% {
+      transform: translate(2px, -2px);
+    }
+
+    100% {
+      transform: translate(0);
+    }
+  }
+
+  @keyframes glitch-color {
+    0% {
+      text-shadow: 2px 0 #ff4d00, -2px 0 #00f2ff;
+    }
+
+    50% {
+      text-shadow: -2px 1px #ff4d00, 2px -1px #00f2ff;
+    }
+
+    100% {
+      text-shadow: 2px 0 #ff4d00, -2px 0 #00f2ff;
+    }
+  }
+
+  .group:hover .glitch-effect {
+    animation: glitch-anim 0.2s infinite linear alternate-reverse, glitch-color 0.1s infinite linear;
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(40px);
+  }
+}
+
+.animate-grid {
+  animation: grid-move 4s linear infinite;
+}
+
+@layer base {
+
+  html,
+  body {
+    /* Bloque tout dépassement horizontal au niveau du navigateur */
+    overflow-x: hidden;
+    /* Empêche le rebond élastique sur iOS qui peut faire apparaître du blanc */
+    position: relative;
+    max-width: 100vw;
+  }
 }
